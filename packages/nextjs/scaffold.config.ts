@@ -10,7 +10,26 @@ export type ScaffoldConfig = {
 
 const scaffoldConfig = {
   // The networks on which your DApp is live
-  targetNetworks: [chains.hardhat],
+  targetNetworks: [
+    {
+      id: 11155111,
+      name: "virtual_sepolia",
+      rpcUrls: {
+        default: {
+          http: ["https://virtual.sepolia.rpc.tenderly.co/d147ee6e-cb35-4ed8-8bc1-0f7fe4939bd5"],
+        },
+        public: {
+          http: ["https://virtual.sepolia.rpc.tenderly.co/d147ee6e-cb35-4ed8-8bc1-0f7fe4939bd5"],
+        },
+      },
+      nativeCurrency: {
+        name: "Sepolia ETH",
+        symbol: "ETH",
+        decimals: 18,
+      },
+      testnet: true, 
+    },
+  ],
 
   // The interval at which your front-end polls the RPC servers for new data
   // it has no effect if you only target the local network (default is 4000)
