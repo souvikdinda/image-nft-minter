@@ -1,0 +1,303 @@
+{
+  "address": "0x7Bb68DFAfE03bA3DB3862D4602e03216b5765C59",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "collection",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "CollectionRegistered",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "allCollections",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAllCollections",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "collection",
+          "type": "address"
+        }
+      ],
+      "name": "getCollectionMetadata",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "getCollectionsByOwner",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "collection",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "registerCollection",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xaacaabba90a6e2301ae0988ba06cb1b76bdd9756e1bd18cbc0f7b851046d9293",
+  "receipt": {
+    "to": null,
+    "from": "0xaA0ef66Ee5A61C363605C4030Be377e5643e9d8D",
+    "contractAddress": "0x7Bb68DFAfE03bA3DB3862D4602e03216b5765C59",
+    "transactionIndex": 0,
+    "gasUsed": "568759",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x885b7fc91977af5dba1b64dce86c71159e7aaa3cb697d5031c93b42296d578e7",
+    "transactionHash": "0xaacaabba90a6e2301ae0988ba06cb1b76bdd9756e1bd18cbc0f7b851046d9293",
+    "logs": [],
+    "blockNumber": 7199294,
+    "cumulativeGasUsed": "568759",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "e22af3c55e8099a00ca9c71d0a7ff0b8",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"collection\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"}],\"name\":\"CollectionRegistered\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"allCollections\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getAllCollections\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"collection\",\"type\":\"address\"}],\"name\":\"getCollectionMetadata\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"getCollectionsByOwner\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"collection\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"string\",\"name\":\"symbol\",\"type\":\"string\"}],\"name\":\"registerCollection\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"getAllCollections()\":{\"details\":\"Returns all registered collections.\",\"returns\":{\"_0\":\"An array of all collection addresses.\"}},\"getCollectionMetadata(address)\":{\"details\":\"Returns metadata for a specific collection.\",\"params\":{\"collection\":\"The address of the collection.\"},\"returns\":{\"name\":\"The name of the collection.\",\"owner\":\"The owner of the collection.\",\"symbol\":\"The symbol of the collection.\"}},\"getCollectionsByOwner(address)\":{\"details\":\"Returns all collections owned by a specific address.\",\"params\":{\"owner\":\"The address of the owner.\"},\"returns\":{\"_0\":\"An array of collection addresses owned by the address.\"}},\"registerCollection(address,address,string,string)\":{\"details\":\"Registers a new collection with the registry.\",\"params\":{\"collection\":\"The address of the collection contract.\",\"name\":\"The name of the collection.\",\"owner\":\"The address of the owner of the collection.\",\"symbol\":\"The symbol of the collection.\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/NFTCollectionRegistry.sol\":\"NFTCollectionRegistry\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/NFTCollectionRegistry.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\ncontract NFTCollectionRegistry {\\n    struct CollectionInfo {\\n        string name;\\n        string symbol;\\n        address owner;\\n    }\\n    address[] public allCollections;\\n    mapping(address => address[]) private ownerToCollections;\\n    mapping(address => CollectionInfo) private collectionMetadata;\\n\\n    event CollectionRegistered(address indexed collection, address indexed owner, string name, string symbol);\\n\\n    /**\\n     * @dev Registers a new collection with the registry.\\n     * @param collection The address of the collection contract.\\n     * @param owner The address of the owner of the collection.\\n     * @param name The name of the collection.\\n     * @param symbol The symbol of the collection.\\n     */\\n    function registerCollection(address collection, address owner, string memory name, string memory symbol) external {\\n        require(collection != address(0), \\\"Collection address cannot be zero\\\");\\n        require(owner != address(0), \\\"Owner address cannot be zero\\\");\\n        allCollections.push(collection);\\n        ownerToCollections[owner].push(collection);\\n        collectionMetadata[collection] = CollectionInfo({\\n            name: name,\\n            symbol: symbol,\\n            owner: owner\\n        });\\n        emit CollectionRegistered(collection, owner, name, symbol);\\n    }\\n\\n    /**\\n     * @dev Returns all registered collections.\\n     * @return An array of all collection addresses.\\n     */\\n    function getAllCollections() external view returns (address[] memory) {\\n        return allCollections;\\n    }\\n\\n    /**\\n     * @dev Returns all collections owned by a specific address.\\n     * @param owner The address of the owner.\\n     * @return An array of collection addresses owned by the address.\\n     */\\n    function getCollectionsByOwner(address owner) external view returns (address[] memory) {\\n        return ownerToCollections[owner];\\n    }\\n\\n    /**\\n     * @dev Returns metadata for a specific collection.\\n     * @param collection The address of the collection.\\n     * @return name The name of the collection.\\n     * @return symbol The symbol of the collection.\\n     * @return owner The owner of the collection.\\n    */\\n    function getCollectionMetadata(address collection) external view returns (string memory name, string memory symbol, address owner) {\\n        CollectionInfo memory info = collectionMetadata[collection];\\n        return (info.name, info.symbol, info.owner);\\n    }\\n}\",\"keccak256\":\"0x9d5fa19f93e897d7c15b72e27ab8b4c9cf61847c09fd7c4a97d3130ff8524d46\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b50610953806100206000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c8063167ef4951461005c578063596d04121461008c5780636804a958146100ae578063d5da76fb146100c3578063e178d60c146100d8575b600080fd5b61006f61006a366004610556565b6100eb565b6040516001600160a01b0390911681526020015b60405180910390f35b61009f61009a36600461058b565b610115565b604051610083939291906105f3565b6100b661029d565b6040516100839190610631565b6100d66100d1366004610721565b6102ff565b005b6100b66100e636600461058b565b6104e0565b600081815481106100fb57600080fd5b6000918252602090912001546001600160a01b0316905081565b60608060008060026000866001600160a01b03166001600160a01b0316815260200190815260200160002060405180606001604052908160008201805461015b906107a6565b80601f0160208091040260200160405190810160405280929190818152602001828054610187906107a6565b80156101d45780601f106101a9576101008083540402835291602001916101d4565b820191906000526020600020905b8154815290600101906020018083116101b757829003601f168201915b505050505081526020016001820180546101ed906107a6565b80601f0160208091040260200160405190810160405280929190818152602001828054610219906107a6565b80156102665780601f1061023b57610100808354040283529160200191610266565b820191906000526020600020905b81548152906001019060200180831161024957829003601f168201915b5050509183525050600291909101546001600160a01b03166020918201528151908201516040909201519097919650945092505050565b606060008054806020026020016040519081016040528092919081815260200182805480156102f557602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116102d7575b5050505050905090565b6001600160a01b0384166103645760405162461bcd60e51b815260206004820152602160248201527f436f6c6c656374696f6e20616464726573732063616e6e6f74206265207a65726044820152606f60f81b60648201526084015b60405180910390fd5b6001600160a01b0383166103ba5760405162461bcd60e51b815260206004820152601c60248201527f4f776e657220616464726573732063616e6e6f74206265207a65726f00000000604482015260640161035b565b60008054600181810183557f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56390910180546001600160a01b038089166001600160a01b03199283168117909355871680855260208481526040808720805496870181558752818720909501805490931684179092558351606081018552878152808301879052808501919091529184526002905291208151819061045e908261082f565b5060208201516001820190610473908261082f565b5060409182015160029190910180546001600160a01b0319166001600160a01b039283161790559051848216918616907f3b49ff22359576b22c61f9263e1b9b7779d2af4b6a2d9bda2088d976064789da906104d290869086906108ef565b60405180910390a350505050565b6001600160a01b03811660009081526001602090815260409182902080548351818402810184019094528084526060939283018282801561054a57602002820191906000526020600020905b81546001600160a01b0316815260019091019060200180831161052c575b50505050509050919050565b60006020828403121561056857600080fd5b5035919050565b80356001600160a01b038116811461058657600080fd5b919050565b60006020828403121561059d57600080fd5b6105a68261056f565b9392505050565b6000815180845260005b818110156105d3576020818501810151868301820152016105b7565b506000602082860101526020601f19601f83011685010191505092915050565b60608152600061060660608301866105ad565b828103602084015261061881866105ad565b91505060018060a01b0383166040830152949350505050565b6020808252825182820181905260009190848201906040850190845b818110156106725783516001600160a01b03168352928401929184019160010161064d565b50909695505050505050565b634e487b7160e01b600052604160045260246000fd5b600082601f8301126106a557600080fd5b813567ffffffffffffffff808211156106c0576106c061067e565b604051601f8301601f19908116603f011681019082821181831017156106e8576106e861067e565b8160405283815286602085880101111561070157600080fd5b836020870160208301376000602085830101528094505050505092915050565b6000806000806080858703121561073757600080fd5b6107408561056f565b935061074e6020860161056f565b9250604085013567ffffffffffffffff8082111561076b57600080fd5b61077788838901610694565b9350606087013591508082111561078d57600080fd5b5061079a87828801610694565b91505092959194509250565b600181811c908216806107ba57607f821691505b6020821081036107da57634e487b7160e01b600052602260045260246000fd5b50919050565b601f82111561082a57600081815260208120601f850160051c810160208610156108075750805b601f850160051c820191505b8181101561082657828155600101610813565b5050505b505050565b815167ffffffffffffffff8111156108495761084961067e565b61085d8161085784546107a6565b846107e0565b602080601f831160018114610892576000841561087a5750858301515b600019600386901b1c1916600185901b178555610826565b600085815260208120601f198616915b828110156108c1578886015182559484019460019091019084016108a2565b50858210156108df5787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b60408152600061090260408301856105ad565b828103602084015261091481856105ad565b9594505050505056fea264697066735822122057516aeeea78a5b63364f2bf95ec6c09b40c757a692e6211db53adc9e20d209b64736f6c63430008140033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100575760003560e01c8063167ef4951461005c578063596d04121461008c5780636804a958146100ae578063d5da76fb146100c3578063e178d60c146100d8575b600080fd5b61006f61006a366004610556565b6100eb565b6040516001600160a01b0390911681526020015b60405180910390f35b61009f61009a36600461058b565b610115565b604051610083939291906105f3565b6100b661029d565b6040516100839190610631565b6100d66100d1366004610721565b6102ff565b005b6100b66100e636600461058b565b6104e0565b600081815481106100fb57600080fd5b6000918252602090912001546001600160a01b0316905081565b60608060008060026000866001600160a01b03166001600160a01b0316815260200190815260200160002060405180606001604052908160008201805461015b906107a6565b80601f0160208091040260200160405190810160405280929190818152602001828054610187906107a6565b80156101d45780601f106101a9576101008083540402835291602001916101d4565b820191906000526020600020905b8154815290600101906020018083116101b757829003601f168201915b505050505081526020016001820180546101ed906107a6565b80601f0160208091040260200160405190810160405280929190818152602001828054610219906107a6565b80156102665780601f1061023b57610100808354040283529160200191610266565b820191906000526020600020905b81548152906001019060200180831161024957829003601f168201915b5050509183525050600291909101546001600160a01b03166020918201528151908201516040909201519097919650945092505050565b606060008054806020026020016040519081016040528092919081815260200182805480156102f557602002820191906000526020600020905b81546001600160a01b031681526001909101906020018083116102d7575b5050505050905090565b6001600160a01b0384166103645760405162461bcd60e51b815260206004820152602160248201527f436f6c6c656374696f6e20616464726573732063616e6e6f74206265207a65726044820152606f60f81b60648201526084015b60405180910390fd5b6001600160a01b0383166103ba5760405162461bcd60e51b815260206004820152601c60248201527f4f776e657220616464726573732063616e6e6f74206265207a65726f00000000604482015260640161035b565b60008054600181810183557f290decd9548b62a8d60345a988386fc84ba6bc95484008f6362f93160ef3e56390910180546001600160a01b038089166001600160a01b03199283168117909355871680855260208481526040808720805496870181558752818720909501805490931684179092558351606081018552878152808301879052808501919091529184526002905291208151819061045e908261082f565b5060208201516001820190610473908261082f565b5060409182015160029190910180546001600160a01b0319166001600160a01b039283161790559051848216918616907f3b49ff22359576b22c61f9263e1b9b7779d2af4b6a2d9bda2088d976064789da906104d290869086906108ef565b60405180910390a350505050565b6001600160a01b03811660009081526001602090815260409182902080548351818402810184019094528084526060939283018282801561054a57602002820191906000526020600020905b81546001600160a01b0316815260019091019060200180831161052c575b50505050509050919050565b60006020828403121561056857600080fd5b5035919050565b80356001600160a01b038116811461058657600080fd5b919050565b60006020828403121561059d57600080fd5b6105a68261056f565b9392505050565b6000815180845260005b818110156105d3576020818501810151868301820152016105b7565b506000602082860101526020601f19601f83011685010191505092915050565b60608152600061060660608301866105ad565b828103602084015261061881866105ad565b91505060018060a01b0383166040830152949350505050565b6020808252825182820181905260009190848201906040850190845b818110156106725783516001600160a01b03168352928401929184019160010161064d565b50909695505050505050565b634e487b7160e01b600052604160045260246000fd5b600082601f8301126106a557600080fd5b813567ffffffffffffffff808211156106c0576106c061067e565b604051601f8301601f19908116603f011681019082821181831017156106e8576106e861067e565b8160405283815286602085880101111561070157600080fd5b836020870160208301376000602085830101528094505050505092915050565b6000806000806080858703121561073757600080fd5b6107408561056f565b935061074e6020860161056f565b9250604085013567ffffffffffffffff8082111561076b57600080fd5b61077788838901610694565b9350606087013591508082111561078d57600080fd5b5061079a87828801610694565b91505092959194509250565b600181811c908216806107ba57607f821691505b6020821081036107da57634e487b7160e01b600052602260045260246000fd5b50919050565b601f82111561082a57600081815260208120601f850160051c810160208610156108075750805b601f850160051c820191505b8181101561082657828155600101610813565b5050505b505050565b815167ffffffffffffffff8111156108495761084961067e565b61085d8161085784546107a6565b846107e0565b602080601f831160018114610892576000841561087a5750858301515b600019600386901b1c1916600185901b178555610826565b600085815260208120601f198616915b828110156108c1578886015182559484019460019091019084016108a2565b50858210156108df5787850151600019600388901b60f8161c191681555b5050505050600190811b01905550565b60408152600061090260408301856105ad565b828103602084015261091481856105ad565b9594505050505056fea264697066735822122057516aeeea78a5b63364f2bf95ec6c09b40c757a692e6211db53adc9e20d209b64736f6c63430008140033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "getAllCollections()": {
+        "details": "Returns all registered collections.",
+        "returns": {
+          "_0": "An array of all collection addresses."
+        }
+      },
+      "getCollectionMetadata(address)": {
+        "details": "Returns metadata for a specific collection.",
+        "params": {
+          "collection": "The address of the collection."
+        },
+        "returns": {
+          "name": "The name of the collection.",
+          "owner": "The owner of the collection.",
+          "symbol": "The symbol of the collection."
+        }
+      },
+      "getCollectionsByOwner(address)": {
+        "details": "Returns all collections owned by a specific address.",
+        "params": {
+          "owner": "The address of the owner."
+        },
+        "returns": {
+          "_0": "An array of collection addresses owned by the address."
+        }
+      },
+      "registerCollection(address,address,string,string)": {
+        "details": "Registers a new collection with the registry.",
+        "params": {
+          "collection": "The address of the collection contract.",
+          "name": "The name of the collection.",
+          "owner": "The address of the owner of the collection.",
+          "symbol": "The symbol of the collection."
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 11,
+        "contract": "contracts/NFTCollectionRegistry.sol:NFTCollectionRegistry",
+        "label": "allCollections",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_array(t_address)dyn_storage"
+      },
+      {
+        "astId": 16,
+        "contract": "contracts/NFTCollectionRegistry.sol:NFTCollectionRegistry",
+        "label": "ownerToCollections",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_array(t_address)dyn_storage)"
+      },
+      {
+        "astId": 21,
+        "contract": "contracts/NFTCollectionRegistry.sol:NFTCollectionRegistry",
+        "label": "collectionMetadata",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_address,t_struct(CollectionInfo)8_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)dyn_storage": {
+        "base": "t_address",
+        "encoding": "dynamic_array",
+        "label": "address[]",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_array(t_address)dyn_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => address[])",
+        "numberOfBytes": "32",
+        "value": "t_array(t_address)dyn_storage"
+      },
+      "t_mapping(t_address,t_struct(CollectionInfo)8_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => struct NFTCollectionRegistry.CollectionInfo)",
+        "numberOfBytes": "32",
+        "value": "t_struct(CollectionInfo)8_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(CollectionInfo)8_storage": {
+        "encoding": "inplace",
+        "label": "struct NFTCollectionRegistry.CollectionInfo",
+        "members": [
+          {
+            "astId": 3,
+            "contract": "contracts/NFTCollectionRegistry.sol:NFTCollectionRegistry",
+            "label": "name",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 5,
+            "contract": "contracts/NFTCollectionRegistry.sol:NFTCollectionRegistry",
+            "label": "symbol",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 7,
+            "contract": "contracts/NFTCollectionRegistry.sol:NFTCollectionRegistry",
+            "label": "owner",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address"
+          }
+        ],
+        "numberOfBytes": "96"
+      }
+    }
+  }
+}

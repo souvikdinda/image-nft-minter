@@ -43,6 +43,7 @@
     "node": ">=18.18.0"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0",
     "@tenderly/api-client": "^1.1.0",
     "@tenderly/hardhat-tenderly": "2.2.1",
     "@types/prettier": "^3.0.0",

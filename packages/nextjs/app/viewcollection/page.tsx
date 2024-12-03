@@ -3,10 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "../../hooks/useWallet";
-import { fetchCollections } from "../../services/fetchCollections";
+import { PinataSDK } from "pinata-web3";
+import { useContractStore } from "~~/services/contractStore";
+import deployedContracts from "~~/contracts/deployedContracts";
+import { ethers } from "ethers";
+
+const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
+const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL!;
+
+const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
 interface NFTCollection {
-  tokenId: string;
   name: string;
   symbol: string;
   contractAddress: string;
@@ -29,22 +36,29 @@ export default function ViewCollections() {
 
     const fetchedCollections: NFTCollection[] = [];
     try {
-      const collections = await fetchCollections(provider, account);
-      for (const collection of collections) {
-        console.log(
-          "Fetching NFT with token ID:",
-          collection.tokenId,
-          collection.name,
-          collection.symbol,
-          collection.contractAddress,
-          collection.createdBy,
-        );
+      const signer = provider.getSigner();
+      const network = await provider.getNetwork();
+      const networkId = network.chainId.toString();
+      const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
+      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const registryConract = contractStore.getRegistryContract();
+      if (!registryConract) {
+        console.error("Failed to get registry contract.");
+        return;
+      }
+      const collectionContractAddresses: string[] = await registryConract.getCollectionsByOwner(account);
+      if (!collectionContractAddresses.length) {
+        console.log("No collections found for this account.");
+        return [];
+      }
+
+      for (const contractAddress of collectionContractAddresses) {
+        const collectionMetadata = await registryConract.getCollectionMetadata(contractAddress);
         fetchedCollections.push({
-          tokenId: collection.tokenId,
-          name: collection.name,
-          symbol: collection.symbol,
-          contractAddress: collection.contractAddress,
-          createdBy: collection.createdBy,
+          name: collectionMetadata.name,
+          symbol: collectionMetadata.symbol,
+          contractAddress,
+          createdBy: account,
         });
       }
       setCollections(fetchedCollections);
@@ -59,7 +73,7 @@ export default function ViewCollections() {
     if (account && provider) {
       fetchAllCollections();
     }
-  }, [account, provider, fetchAllCollections]);
+  }, [account, provider]);
 
   const handleAdd = (contractAddress: string) => {
     router.push(`/viewcollection/${contractAddress}/add`);
@@ -86,14 +100,11 @@ export default function ViewCollections() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 w-full max-w-5xl">
           {collections.map(collection => (
             <div
-              key={collection.tokenId}
+              key={collection.contractAddress}
               className="bg-base-100 shadow-md rounded-xl p-6 text-center flex flex-col items-center"
             >
               <h3 className="text-xl font-semibold text-base-content mb-2">{collection.name}</h3>
               <p className="text-sm text-base-content mb-2">{collection.symbol}</p>
-              <p className="text-sm text-gray-500">
-                <strong>Collection ID:</strong> {collection.tokenId}
-              </p>
               <div className="flex space-x-4 mt-4">
                 {/* Add Button */}
                 <button onClick={() => handleAdd(collection.contractAddress)} className="btn btn-primary">

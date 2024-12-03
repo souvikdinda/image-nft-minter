@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import deployedContracts from "../../contracts/deployedContracts";
+import { useContractStore } from "~~/services/contractStore";
 import { useWallet } from "../../hooks/useWallet";
-import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
+import deployedContracts from "../../contracts/deployedContracts";
+import { ethers } from "ethers";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || "";
@@ -14,7 +15,7 @@ export default function CreateCollection() {
   const [name, setName] = useState("");
   const [symbol, setSymbol] = useState("");
   const [status, setStatus] = useState("");
-
+  
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
   const handleDeployCollection = async () => {
@@ -29,16 +30,12 @@ export default function CreateCollection() {
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractInfo = deployedContracts[numericNetworkId]?.NFTCollection;
-      if (!contractInfo) {
-        alert(`NFTCollection contract is not deployed on network ${numericNetworkId}`);
+      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const factory = contractStore.getCollectionContractFactory();
+      if (!factory) {
+        console.error("Failed to get collection contract factory.");
         return;
       }
-      const factory = new ethers.ContractFactory(
-        contractInfo.abi,
-        contractInfo.bytecode,
-        signer as unknown as ethers.Signer,
-      );
       const contract = await factory.deploy(name, symbol);
       const deploymentTx = contract.deploymentTransaction();
       if (!deploymentTx) {
@@ -51,6 +48,7 @@ export default function CreateCollection() {
         console.error("❌ Deployment failed. Receipt status:", receipt?.status);
       }
       const contractAddress = receipt.contractAddress;
+
       console.log("Creating metadata...");
       const metadata = { name, symbol, contractAddress, createdBy: account };
       const metadataBlob = new Blob([JSON.stringify(metadata)], { type: "application/json" });
@@ -59,12 +57,20 @@ export default function CreateCollection() {
       const metadataUrl = `ipfs://${metadataResponse.IpfsHash}`;
       console.log("Metadata uploaded to Pinata:", metadataUrl);
 
+      const registryConract = contractStore.getRegistryContract();
+      if (!registryConract) {
+        console.error("Failed to get registry contract.");
+        return;
+      }
+      await registryConract.registerCollection(contractAddress, account, name, symbol);
+
       console.log("Minting NFT...");
-      const deployedParentContract = new ethers.Contract(
-        contractInfo.address,
-        contractInfo.abi,
-        signer as unknown as ethers.Signer,
-      );
+      const deployedParentContract = contractStore.getCollectionContract();
+      if (!deployedParentContract) {
+        console.error("Failed to get parent contract.");
+        return;
+      }
+
       const tx = await deployedParentContract.mintToken(account, metadataUrl);
       const mintedCollectionReceipt = await provider.waitForTransaction(tx.hash);
       if (mintedCollectionReceipt.status === 1) {

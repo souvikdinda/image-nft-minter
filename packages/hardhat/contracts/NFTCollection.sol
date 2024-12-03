@@ -2,8 +2,9 @@
 pragma solidity >=0.8.0 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-contract NFTCollection is ERC721URIStorage {
+contract NFTCollection is ERC721, ERC721URIStorage {
     uint256 private _currentTokenId;
     mapping(address => uint256[]) private _ownedTokens;
 
@@ -37,5 +38,13 @@ contract NFTCollection is ERC721URIStorage {
 
     function getTokensOfOwner(address owner) public view returns (uint256[] memory) {
         return _ownedTokens[owner];
+    }
+
+    function tokenURI(uint256 tokenId) public view override(ERC721, ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, ERC721URIStorage) returns (bool) {
+        return super.supportsInterface(interfaceId);
     }
 }

@@ -6,6 +6,7 @@ import deployedContracts from "../../../../contracts/deployedContracts";
 import { useWallet } from "../../../../hooks/useWallet";
 import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
+import { useContractStore } from "~~/services/contractStore";
 
 interface NFT {
   tokenId: string;
@@ -38,14 +39,14 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractInfo = deployedContracts[numericNetworkId]?.NFTCollection;
-      if (!contractInfo) {
-        alert(`NFTCollection contract not deployed on network ${networkId}`);
+      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+
+      const contract = contractStore.getCollectionContractFromAddress(contractaddress);
+      if (!contract) {
+        console.error("Failed to get collection contract for address:", contractaddress);
         setLoading(false);
         return;
       }
-
-      const contract = new ethers.Contract(contractaddress, contractInfo.abi, signer as unknown as ethers.Signer);
       const tokenIds: ethers.BigNumberish[] = await contract.getTokensOfOwner(account);
       const fetchedNFTs: NFT[] = [];
 
@@ -79,7 +80,7 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
     if (account && provider) {
       fetchCollectionImages();
     }
-  }, [account, provider, fetchCollectionImages]);
+  }, [account, provider]);
 
   return (
     <>
@@ -99,9 +100,7 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
               key={nft.tokenId}
               className="bg-base-100 shadow-md rounded-xl p-6 text-center flex flex-col items-center"
             >
-              <div className="w-full h-auto rounded-lg mb-4">
-                <Image src={nft.image} alt={nft.name} fill style={{ objectFit: "cover" }} />
-              </div>
+              <img src={nft.image} alt={nft.name} className="w-full h-auto rounded-lg mb-4" />
               <h3 className="text-xl font-semibold text-base-content mb-2">{nft.name}</h3>
               <p className="text-sm text-base-content mb-2">{nft.description}</p>
               <p className="text-sm text-gray-500">

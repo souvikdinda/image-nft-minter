@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import deployedContracts from "../../../../contracts/deployedContracts";
 import { useWallet } from "../../../../hooks/useWallet";
-import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
+import { useContractStore } from "~~/services/contractStore";
+import deployedContracts from "../../../../contracts/deployedContracts";
+import { ethers } from "ethers";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || "";
@@ -31,15 +32,12 @@ export default function AddToCollection({ params }: { params: { contractaddress:
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractInfo = deployedContracts[numericNetworkId]?.NFTCollection;
-      if (!contractInfo) {
-        alert(`NFTCollection contract is not deployed on network ${numericNetworkId}`);
+      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contract = contractStore.getCollectionContractFromAddress(contractaddress);
+      if (!contract) {
+        console.error("Failed to get collection contract for address:", contractaddress);
         return;
       }
-      console.log("Contract Address", contractaddress);
-
-      const contract = new ethers.Contract(contractaddress, contractInfo.abi, signer as unknown as ethers.Signer);
-      console.log("Signer", signer);
 
       setStatus("Uploading image to Pinata...");
       const originalFileName = image.name;
