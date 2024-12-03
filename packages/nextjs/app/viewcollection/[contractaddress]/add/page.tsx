@@ -1,25 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import deployedContracts from "../../../../contracts/deployedContracts";
+import { useWallet } from "../../../../hooks/useWallet";
 import { ethers } from "ethers";
-import { useWallet } from "../../hooks/useWallet";
 import { PinataSDK } from "pinata-web3";
-import deployedContracts from "../../contracts/deployedContracts";
 
-const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
-const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL!;
+const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
+const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || "";
 
-export default function CreateCollection() {
+export default function AddToCollection({ params }: { params: { contractaddress: string } }) {
   const { provider, connectWallet, account } = useWallet();
+  const { contractaddress } = params;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [file, setFile] = useState<File | null>(null);
+  const [image, setImage] = useState<File | null>(null);
   const [status, setStatus] = useState("");
 
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
-  const handleMintNFT = async () => {
-    if (!provider || !file || !name || !description) {
+  const handleImageUpload = async () => {
+    if (!provider || !image || !name || !description) {
       alert("Please provide all required inputs and connect your wallet.");
       return;
     }
@@ -30,24 +31,31 @@ export default function CreateCollection() {
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      console.log(numericNetworkId);
-
       const contractInfo = deployedContracts[numericNetworkId]?.NFTCollection;
       if (!contractInfo) {
         alert(`NFTCollection contract is not deployed on network ${numericNetworkId}`);
         return;
       }
+      console.log("Contract Address", contractaddress);
 
-      const contract = new ethers.Contract(contractInfo.address, contractInfo.abi, signer as unknown as ethers.Signer);
+      const contract = new ethers.Contract(contractaddress, contractInfo.abi, signer as unknown as ethers.Signer);
+      console.log("Signer", signer);
 
       setStatus("Uploading image to Pinata...");
-      const imageResponse = await pinata.upload.file(file);
-      const imageUrl = `ipfs://${imageResponse.IpfsHash}`;
+      const originalFileName = image.name;
+      const fileExtension = originalFileName.includes(".") ? originalFileName.split(".").pop() : "unknown";
+      const originalFileNameWithoutExt = originalFileName.includes(".")
+        ? originalFileName.substring(0, originalFileName.lastIndexOf("."))
+        : originalFileName;
+      const newFileName = `${originalFileNameWithoutExt}-${Date.now().toString()}.${fileExtension}`;
+      const renamedImage = new File([image], newFileName, { type: image.type });
+      setImage(renamedImage);
 
-      setStatus("Creating metadata...");
+      const imageResponse = await pinata.upload.file(image);
+      const imageUrl = `ipfs://${imageResponse.IpfsHash}`;
       const metadata = { name, description, image: imageUrl };
       const metadataBlob = new Blob([JSON.stringify(metadata)], { type: "application/json" });
-      const metadataFile = new File([metadataBlob], `${name}_metadata.json`);
+      const metadataFile = new File([metadataBlob], `${imageResponse.IpfsHash}_metadata.json`);
 
       setStatus("Uploading metadata to Pinata...");
       const metadataResponse = await pinata.upload.file(metadataFile);
@@ -63,8 +71,8 @@ export default function CreateCollection() {
         setStatus("Transaction failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error minting NFT:", error);
-      setStatus("Failed to mint NFT.");
+      console.error("Error uploading image:", error);
+      setStatus("Failed to upload image.");
     }
   };
 
@@ -79,7 +87,7 @@ export default function CreateCollection() {
               type="text"
               placeholder="Enter NFT Name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={e => setName(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
@@ -88,7 +96,7 @@ export default function CreateCollection() {
             <textarea
               placeholder="Enter NFT Description"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={e => setDescription(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
               rows={4}
             ></textarea>
@@ -105,15 +113,13 @@ export default function CreateCollection() {
               id="file-upload"
               type="file"
               accept="image/*"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
+              onChange={e => setImage(e.target.files?.[0] || null)}
               className="hidden"
             />
-            <span className="ml-3 mb-2 text-base-content">
-              {file ? file.name : "No file chosen"}
-            </span>
+            <span className="ml-3 mb-2 text-base-content">{image ? image.name : "No file chosen"}</span>
           </div>
           <button
-            onClick={handleMintNFT}
+            onClick={handleImageUpload}
             disabled={!provider}
             className="w-full btn btn-primary font-bold transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -126,10 +132,7 @@ export default function CreateCollection() {
           )}
           <div className="mt-4 text-center">
             {!account && (
-              <button
-                onClick={connectWallet}
-                className="text-blue-600 hover:underline font-semibold"
-              >
+              <button onClick={connectWallet} className="text-blue-600 hover:underline font-semibold">
                 Connect Wallet
               </button>
             )}

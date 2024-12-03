@@ -22,7 +22,7 @@ interface ExtendedHardhatUserConfig extends HardhatUserConfig {
 
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
-  
+
 const config: ExtendedHardhatUserConfig = {
   solidity: {
     compilers: [
@@ -45,7 +45,7 @@ const config: ExtendedHardhatUserConfig = {
   },
   networks: {
     virtual_sepolia: {
-      url: "https://virtual.sepolia.rpc.tenderly.co/d147ee6e-cb35-4ed8-8bc1-0f7fe4939bd5",
+      url: "https://virtual.sepolia.rpc.tenderly.co/08ddc423-969e-4479-a078-4a020da6d85f",
       chainId: 11155111,
       accounts: [deployerPrivateKey],
       gasPrice: "auto",

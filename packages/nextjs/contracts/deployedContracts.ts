@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   11155111: {
     NFTCollection: {
-      address: "0x81C31ba74d4dEc5d9C53Ae293d84a2fBc5c63138",
+      address: "0xAEE31Cd9F0419b0184E1Bd7e8bC82d183B9BCadD",
       abi: [
         {
           inputs: [

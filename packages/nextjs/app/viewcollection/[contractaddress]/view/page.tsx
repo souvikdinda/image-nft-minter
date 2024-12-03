@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import deployedContracts from "../../../../contracts/deployedContracts";
+import { useWallet } from "../../../../hooks/useWallet";
 import { ethers } from "ethers";
-import { useWallet } from "../../hooks/useWallet";
-import deployedContracts from "../../contracts/deployedContracts";
 import { PinataSDK } from "pinata-web3";
 
 interface NFT {
@@ -13,31 +14,24 @@ interface NFT {
   image: string;
 }
 
-const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
-const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL!;
+const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
+const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || "";
 
-export default function ViewNFTs() {
-  const { provider, connectWallet, account } = useWallet();
+export default function ViewImagesFromCollection({ params }: { params: { contractaddress: string } }) {
+  const { provider, account } = useWallet();
   const [nfts, setNFTs] = useState<NFT[]>([]);
+  const { contractaddress } = params;
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
-  useEffect(() => {
-    if (account && provider) {
-      fetchNFTs();
-    }
-  }, [account, provider]);
-
-  const fetchNFTs = async () => {
+  const fetchCollectionImages = async () => {
     if (!account || !provider) {
       alert("Please connect your wallet");
       return;
     }
 
     setLoading(true);
-    setErrorMessage(null);
 
     try {
       const signer = provider.getSigner();
@@ -51,7 +45,7 @@ export default function ViewNFTs() {
         return;
       }
 
-      const contract = new ethers.Contract(contractInfo.address, contractInfo.abi, signer as unknown as ethers.Signer);
+      const contract = new ethers.Contract(contractaddress, contractInfo.abi, signer as unknown as ethers.Signer);
       const tokenIds: ethers.BigNumberish[] = await contract.getTokensOfOwner(account);
       const fetchedNFTs: NFT[] = [];
 
@@ -62,10 +56,7 @@ export default function ViewNFTs() {
         const metadataIpfs = tokenURI.replace("ipfs://", "");
         const metadataFile = await pinata.gateways.get(metadataIpfs);
         console.log("Metadata file:", metadataFile);
-        // const metadata = JSON.parse(metadataFile.data?.toString() || "{}");
-        const metadata = typeof metadataFile.data === "string" 
-          ? JSON.parse(metadataFile.data) 
-          : metadataFile.data;
+        const metadata = typeof metadataFile.data === "string" ? JSON.parse(metadataFile.data) : metadataFile.data;
         console.log("Metadata data:", metadata);
         const formattedMetadata: NFT = {
           tokenId: tokenId.toString(),
@@ -79,28 +70,18 @@ export default function ViewNFTs() {
       setNFTs(fetchedNFTs);
     } catch (error) {
       console.error("Error fetching NFTs:", error);
-      setErrorMessage("Failed to fetch NFTs. Please try again later.");
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (account && provider) {
+      fetchCollectionImages();
+    }
+  }, [account, provider, fetchCollectionImages]);
+
   return (
-    // <div>
-    //   <h1>Your NFTs</h1>
-    //   {loading && <p>Loading NFTs...</p>}
-    //   {!loading && nfts.length === 0 && <p>No NFTs found</p>}
-    //   <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-    //     {nfts.map((nft) => (
-    //       <div key={nft.tokenId} style={{ border: "1px solid #ccc", padding: "16px", borderRadius: "8px", width: "200px", textAlign: "center" }}>
-    //         <img src={nft.image} alt={nft.name} style={{ width: "100%", height: "auto", borderRadius: "4px" }} />
-    //         <h3>{nft.name}</h3>
-    //         <p>{nft.description}</p>
-    //         <p><strong>Token ID:</strong> {nft.tokenId}</p>
-    //       </div>
-    //     ))}
-    //   </div>
-    // </div>
     <>
       <div className="flex flex-col items-center pt-10">
         <h1 className="block text-4xl font-bold text-base-content mb-6">Your NFTs</h1>
@@ -109,22 +90,18 @@ export default function ViewNFTs() {
         {loading && <p className="text-lg font-semibold text-base-content">Loading NFTs...</p>}
 
         {/* No NFTs found */}
-        {!loading && nfts.length === 0 && (
-          <p className="text-lg font-semibold text-base-content">No NFTs found</p>
-        )}
+        {!loading && nfts.length === 0 && <p className="text-lg font-semibold text-base-content">No NFTs found</p>}
 
         {/* NFT Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 w-full max-w-5xl">
-          {nfts.map((nft) => (
+          {nfts.map(nft => (
             <div
               key={nft.tokenId}
               className="bg-base-100 shadow-md rounded-xl p-6 text-center flex flex-col items-center"
             >
-              <img
-                src={nft.image}
-                alt={nft.name}
-                className="w-full h-auto rounded-lg mb-4"
-              />
+              <div className="w-full h-auto rounded-lg mb-4">
+                <Image src={nft.image} alt={nft.name} fill style={{ objectFit: "cover" }} />
+              </div>
               <h3 className="text-xl font-semibold text-base-content mb-2">{nft.name}</h3>
               <p className="text-sm text-base-content mb-2">{nft.description}</p>
               <p className="text-sm text-gray-500">

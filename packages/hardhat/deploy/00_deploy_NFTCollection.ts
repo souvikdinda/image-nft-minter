@@ -21,7 +21,7 @@ const deployNFTCollection: DeployFunction = async function (hre: HardhatRuntimeE
       throw new Error("Transaction hash is undefined. Deployment might have failed.");
     }
 
-    let receipt = await ethers.provider.getTransactionReceipt(deploymentResult.transactionHash);
+    const receipt = await ethers.provider.getTransactionReceipt(deploymentResult.transactionHash);
 
     console.log(`✅ NFTCollection deployed at address: ${deploymentResult.address}`);
     console.log(`📝 NFTCollection transaction hash: ${deploymentResult.transactionHash}`);
