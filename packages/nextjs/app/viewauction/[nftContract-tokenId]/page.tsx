@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import FlipNumbers from "react-flip-numbers";
 import { useWallet } from "../../../hooks/useWallet";
 import deployedContracts from "../../../contracts/deployedContracts";
 import { useContractStore } from "~~/services/contractStore";
@@ -11,7 +12,7 @@ interface AuctionDetails {
   seller: string;
   highestBidder: string;
   highestBid: string;
-  endTime: string;
+  endTime: number;
   settled: boolean;
 }
 
@@ -22,6 +23,7 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
   const [status, setStatus] = useState("");
   const [nftContract, tokenId] = (params['nftContract-tokenId'] || '').split('-');
   const [bidAmount, setBidAmount] = useState("");
+  const [remainingTime, setRemainingTime] = useState("00:00:00");
 
   const fetchAuctionDetails = async () => {
     if (!provider) {
@@ -49,7 +51,7 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
         seller: auctionDetails.seller,
         highestBidder: auctionDetails.highestBidder,
         highestBid: ethers.formatEther(auctionDetails.highestBid),
-        endTime: new Date(Number(auctionDetails.endTime) * 1000).toLocaleString(),
+        endTime: Number(auctionDetails.endTime),
         settled: auctionDetails.settled,
       });
     } catch (error) {
@@ -129,12 +131,37 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
   };
 
   useEffect(() => {
+    if (!details) return;
+
+    const calculateRemainingTime = () => {
+      const now = Math.floor(Date.now() / 1000);
+      const diff = details.endTime - now;
+
+      if (diff <= 0) {
+        setRemainingTime("00:00:00");
+        return;
+      }
+
+      const hours = String(Math.floor(diff / 3600)).padStart(2, "0");
+      const minutes = String(Math.floor((diff % 3600) / 60)).padStart(2, "0");
+      const seconds = String(diff % 60).padStart(2, "0");
+
+      setRemainingTime(`${hours}:${minutes}:${seconds}`);
+    };
+
+    calculateRemainingTime();
+    const timer = setInterval(calculateRemainingTime, 1000);
+
+    return () => clearInterval(timer);
+  }, [details]);
+
+  useEffect(() => {
     if (provider && nftContract && tokenId) {
       fetchAuctionDetails();
     }
   }, [provider, nftContract, tokenId]);
 
-  const isAuctionEnded = details && new Date(details.endTime).getTime() <= Date.now();
+  const isAuctionEnded = details && details.endTime <= Math.floor(Date.now() / 1000);
 
   return (
     <div className="flex flex-col items-center pt-10">
@@ -144,24 +171,39 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
 
       {!loading && details && (
         <div className="shadow-md p-8 w-full max-w-lg flex flex-col bg-base-100 rounded-3xl">
-          <p className="text-lg font-semibold">
+          <p className="text-lg text-center">
             <strong>Seller:</strong> {details.seller}
           </p>
-          <p className="text-lg font-semibold mt-2">
+          <p className="text-lg text-center mt-2">
             <strong>Highest Bidder:</strong> {details.highestBidder}
           </p>
-          <p className="text-lg font-semibold mt-2">
+          <p className="text-lg text-center mt-2">
             <strong>Highest Bid:</strong> {details.highestBid} ETH
           </p>
-          <p className="text-lg font-semibold mt-2">
+          <p className="text-lg text-center mt-2">
             <strong>End Time:</strong> {details.endTime}
           </p>
-          <p className="text-lg font-semibold mt-2">
+          <div className="mt-2">
+            <p className="text-lg text-center">
+              <strong>Time Remaining:</strong>
+            </p>
+            <div className="flex justify-center items-center space-x-4" >
+              <FlipNumbers 
+                height={50} 
+                width={40} 
+                color="currentColor" 
+                background="transparent" 
+                play
+                numbers={remainingTime} 
+              />
+            </div>
+          </div>
+          <p className="text-lg text-center mt-8">
             <strong>Settled:</strong> {details.settled ? "Yes" : "No"}
           </p>
           {!details.settled && (
-            new Date(details.endTime).getTime() > Date.now() ? (
-              account !== details.seller && (
+            !isAuctionEnded ? (
+              (account !== details.seller && account !== details.highestBidder) && (
                 <div className="mt-6">
                   <input
                     type="text"
