@@ -3,7 +3,7 @@
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
-import { BookOpenIcon, FaceSmileIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { BookOpenIcon, FaceSmileIcon, PlusCircleIcon, WrenchIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 
 const Home: NextPage = () => {
@@ -46,6 +46,26 @@ const Home: NextPage = () => {
                 View your NFT collections on the{" "}
                 <Link href="/viewcollection" passHref className="link">
                   View Collections
+                </Link>{" "}
+                tab.
+              </p>
+            </div>
+            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+              <WrenchIcon className="h-8 w-8 fill-secondary" />
+              <p>
+                View all active auctions of NFTs on the{" "}
+                <Link href="/viewauction" passHref className="link">
+                  View Auctions
+                </Link>{" "}
+                tab.
+              </p>
+            </div>
+            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
+              <ShoppingBagIcon className="h-8 w-8 fill-secondary" />
+              <p>
+                View all your purchased NFTs on the{" "}
+                <Link href="/purchasednfts" passHref className="link">
+                  View Purchased NFTs
                 </Link>{" "}
                 tab.
               </p>

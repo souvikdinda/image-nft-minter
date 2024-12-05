@@ -16,10 +16,10 @@ const scaffoldConfig = {
       name: "virtual_sepolia",
       rpcUrls: {
         default: {
-          http: ["https://virtual.sepolia.rpc.tenderly.co/08ddc423-969e-4479-a078-4a020da6d85f"],
+          http: ["https://virtual.sepolia.rpc.tenderly.co/2071e5d2-d352-4a38-86bc-79b9dcafb16d"],
         },
         public: {
-          http: ["https://virtual.sepolia.rpc.tenderly.co/08ddc423-969e-4479-a078-4a020da6d85f"],
+          http: ["https://virtual.sepolia.rpc.tenderly.co/2071e5d2-d352-4a38-86bc-79b9dcafb16d"],
         },
       },
       nativeCurrency: {

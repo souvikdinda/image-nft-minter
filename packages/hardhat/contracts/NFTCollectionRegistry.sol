@@ -25,11 +25,7 @@ contract NFTCollectionRegistry {
         require(owner != address(0), "Owner address cannot be zero");
         allCollections.push(collection);
         ownerToCollections[owner].push(collection);
-        collectionMetadata[collection] = CollectionInfo({
-            name: name,
-            symbol: symbol,
-            owner: owner
-        });
+        collectionMetadata[collection] = CollectionInfo({ name: name, symbol: symbol, owner: owner });
         emit CollectionRegistered(collection, owner, name, symbol);
     }
 
@@ -56,8 +52,10 @@ contract NFTCollectionRegistry {
      * @return name The name of the collection.
      * @return symbol The symbol of the collection.
      * @return owner The owner of the collection.
-    */
-    function getCollectionMetadata(address collection) external view returns (string memory name, string memory symbol, address owner) {
+     */
+    function getCollectionMetadata(
+        address collection
+    ) external view returns (string memory name, string memory symbol, address owner) {
         CollectionInfo memory info = collectionMetadata[collection];
         return (info.name, info.symbol, info.owner);
     }

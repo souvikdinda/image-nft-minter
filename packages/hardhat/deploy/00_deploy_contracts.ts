@@ -73,7 +73,7 @@ const deployNFTCollection: DeployFunction = async function (hre: HardhatRuntimeE
       address: nftCollectionDeployment.address,
       network: "virtual_sepolia",
     });
-    
+
     console.log("✅ Contracts verified successfully!");
     console.log("🏁 Deployment finished.");
   } catch (error) {

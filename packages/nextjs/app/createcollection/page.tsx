@@ -15,7 +15,7 @@ export default function CreateCollection() {
   const [name, setName] = useState("");
   const [symbol, setSymbol] = useState("");
   const [status, setStatus] = useState("");
-  
+
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
   const handleDeployCollection = async () => {
@@ -62,22 +62,13 @@ export default function CreateCollection() {
         console.error("Failed to get registry contract.");
         return;
       }
-      await registryConract.registerCollection(contractAddress, account, name, symbol);
-
-      console.log("Minting NFT...");
-      const deployedParentContract = contractStore.getCollectionContract();
-      if (!deployedParentContract) {
-        console.error("Failed to get parent contract.");
-        return;
-      }
-
-      const tx = await deployedParentContract.mintToken(account, metadataUrl);
-      const mintedCollectionReceipt = await provider.waitForTransaction(tx.hash);
-      if (mintedCollectionReceipt.status === 1) {
-        console.log("✅ NFT minted successfully!");
-        setStatus(`Contract deployed successfully at ${contractAddress}`);
+      const tx = await registryConract.registerCollection(contractAddress, account, name, symbol);
+      const registerdCollectionReceipt = await provider.waitForTransaction(tx.hash);
+      if (registerdCollectionReceipt.status === 1) {
+        console.log("✅ Collection registered successfully!");
+        setStatus(`Collection registered successfully at ${contractAddress}`);
       } else {
-        setStatus("Deployment failed. Please try again.");
+        setStatus("Collection registration failed. Please try again.");
       }
     } catch (error) {
       console.error("Error deploying contract:", error);
@@ -112,9 +103,8 @@ export default function CreateCollection() {
         <button
           onClick={handleDeployCollection}
           disabled={!provider || status.includes("Deploying")}
-          className={`w-full btn btn-primary font-bold flex items-center justify-center ${
-            status.includes("Deploying") ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`w-full btn btn-primary font-bold flex items-center justify-center ${status.includes("Deploying") ? "opacity-50 cursor-not-allowed" : ""
+            }`}
         >
           {status.includes("Deploying") ? (
             <>

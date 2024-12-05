@@ -86,14 +86,14 @@ export default function ViewCollections() {
   return (
     <>
       <div className="flex flex-col items-center pt-10">
-        <h1 className="block text-4xl font-bold text-base-content mb-6">Your NFTs</h1>
+        <h1 className="block text-4xl font-bold text-base-content mb-6">Your Collections</h1>
 
         {/* Loading state */}
-        {loading && <p className="text-lg font-semibold text-base-content">Loading NFTs...</p>}
+        {loading && <p className="text-lg font-semibold text-base-content">Loading collections...</p>}
 
         {/* No NFTs found */}
         {!loading && collections.length === 0 && (
-          <p className="text-lg font-semibold text-base-content">No NFTs found</p>
+          <p className="text-lg font-semibold text-base-content">No Collections found</p>
         )}
 
         {/* NFT Cards */}

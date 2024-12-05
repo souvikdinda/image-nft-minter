@@ -4,7 +4,7 @@ import React, { useCallback, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bars3Icon, BookOpenIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, BookOpenIcon, PlusCircleIcon, ShoppingBagIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useOutsideClick } from "~~/hooks/scaffold-eth";
 
@@ -29,6 +29,16 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/viewcollection",
     icon: <BookOpenIcon className="h-4 w-4" />,
   },
+  {
+    label: "View Auctions",
+    href: "/viewauction",
+    icon: <MagnifyingGlassIcon className="h-4 w-4" />,
+  },
+  {
+    label: "Purchased NFTs",
+    href: "/purchasednfts",
+    icon: <ShoppingBagIcon className="h-4 w-4" />,
+  },
 ];
 
 export const HeaderMenuLinks = () => {
@@ -43,9 +53,8 @@ export const HeaderMenuLinks = () => {
             <Link
               href={href}
               passHref
-              className={`${
-                isActive ? "bg-secondary shadow-md" : ""
-              } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
+              className={`${isActive ? "bg-secondary shadow-md" : ""
+                } hover:bg-secondary hover:shadow-md focus:!bg-secondary active:!text-neutral py-1.5 px-3 text-sm rounded-full gap-2 grid grid-flow-col`}
             >
               {icon}
               <span>{label}</span>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import deployedContracts from "../../../../contracts/deployedContracts";
 import { useWallet } from "../../../../hooks/useWallet";
 import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
 import { useContractStore } from "~~/services/contractStore";
+import { useRouter } from "next/navigation";
 
 interface NFT {
   tokenId: string;
@@ -23,6 +23,7 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
   const [nfts, setNFTs] = useState<NFT[]>([]);
   const { contractaddress } = params;
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
@@ -52,6 +53,8 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
 
       for (const tokenId of tokenIds) {
         console.log("Fetching NFT with token ID:", tokenId);
+        const owner = await contract.ownerOf(tokenId);
+        console.log("Owner:", owner);
         const tokenURI = await contract.tokenURI(tokenId);
         console.log("Token URI:", tokenURI);
         const metadataIpfs = tokenURI.replace("ipfs://", "");
@@ -74,6 +77,10 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCreateAuction = (tokenId: string) => {
+    router.push(`/createauction?contractaddress=${contractaddress}&tokenid=${tokenId}`);
   };
 
   useEffect(() => {
@@ -106,6 +113,9 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
               <p className="text-sm text-gray-500">
                 <strong>Token ID:</strong> {nft.tokenId}
               </p>
+              <div className="flex space-x-4 mt-4">
+                <button onClick={() => handleCreateAuction(nft.tokenId)} className="btn btn-primary">Auction</button>
+              </div>
             </div>
           ))}
         </div>
