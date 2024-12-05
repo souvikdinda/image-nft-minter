@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useContractStore } from "~~/services/contractStore";
-import { useWallet } from "../../hooks/useWallet";
-import { PinataSDK } from "pinata-web3";
 import deployedContracts from "../../contracts/deployedContracts";
+import { useWallet } from "../../hooks/useWallet";
 import { ethers } from "ethers";
+import { PinataSDK } from "pinata-web3";
+import { getContractStore } from "~~/services/contractStore";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || "";
@@ -30,7 +30,7 @@ export default function CreateCollection() {
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
       const factory = contractStore.getCollectionContractFactory();
       if (!factory) {
         console.error("Failed to get collection contract factory.");
@@ -103,8 +103,9 @@ export default function CreateCollection() {
         <button
           onClick={handleDeployCollection}
           disabled={!provider || status.includes("Deploying")}
-          className={`w-full btn btn-primary font-bold flex items-center justify-center ${status.includes("Deploying") ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+          className={`w-full btn btn-primary font-bold flex items-center justify-center ${
+            status.includes("Deploying") ? "opacity-50 cursor-not-allowed" : ""
+          }`}
         >
           {status.includes("Deploying") ? (
             <>

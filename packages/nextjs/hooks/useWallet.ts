@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { Web3Provider } from "@ethersproject/providers";
-import { useState, useEffect } from "react";
 
 export const useWallet = () => {
   const [provider, setProvider] = useState<Web3Provider | null>(null);
@@ -51,4 +51,4 @@ export const useWallet = () => {
     connectWallet,
     disconnectWallet,
   };
-}
+};

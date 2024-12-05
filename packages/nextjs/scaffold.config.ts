@@ -27,7 +27,7 @@ const scaffoldConfig = {
         symbol: "ETH",
         decimals: 18,
       },
-      testnet: true, 
+      testnet: true,
     },
   ],
 

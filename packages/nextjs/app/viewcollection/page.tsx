@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "../../hooks/useWallet";
-import { PinataSDK } from "pinata-web3";
-import { useContractStore } from "~~/services/contractStore";
-import deployedContracts from "~~/contracts/deployedContracts";
 import { ethers } from "ethers";
+import { PinataSDK } from "pinata-web3";
+import deployedContracts from "~~/contracts/deployedContracts";
+import { getContractStore } from "~~/services/contractStore";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT!;
 const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL!;
@@ -40,7 +40,7 @@ export default function ViewCollections() {
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
       const registryConract = contractStore.getRegistryContract();
       if (!registryConract) {
         console.error("Failed to get registry contract.");

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import FlipNumbers from "react-flip-numbers";
-import { useWallet } from "../../../hooks/useWallet";
 import deployedContracts from "../../../contracts/deployedContracts";
-import { useContractStore } from "~~/services/contractStore";
+import { useWallet } from "../../../hooks/useWallet";
 import { ethers } from "ethers";
+import FlipNumbers from "react-flip-numbers";
+import { getContractStore } from "~~/services/contractStore";
 
 interface AuctionDetails {
   seller: string;
@@ -21,7 +21,7 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
   const [details, setDetails] = useState<AuctionDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
-  const [nftContract, tokenId] = (params['nftContract-tokenId'] || '').split('-');
+  const [nftContract, tokenId] = (params["nftContract-tokenId"] || "").split("-");
   const [bidAmount, setBidAmount] = useState("");
   const [remainingTime, setRemainingTime] = useState("00:00:00");
 
@@ -38,7 +38,7 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
 
       const auctionContract = contractStore.getAuctionContract();
       if (!auctionContract) {
@@ -78,7 +78,7 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
 
       const auctionContract = contractStore.getAuctionContract();
       if (!auctionContract) {
@@ -111,7 +111,7 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
 
       const auctionContract = contractStore.getAuctionContract();
       if (!auctionContract) {
@@ -187,48 +187,48 @@ export default function AuctionDetails({ params }: { params: { [key: string]: st
             <p className="text-lg text-center">
               <strong>Time Remaining:</strong>
             </p>
-            <div className="flex justify-center items-center space-x-4" >
-              <FlipNumbers 
-                height={50} 
-                width={40} 
-                color="currentColor" 
-                background="transparent" 
+            <div className="flex justify-center items-center space-x-4">
+              <FlipNumbers
+                height={50}
+                width={40}
+                color="currentColor"
+                background="transparent"
                 play
-                numbers={remainingTime} 
+                numbers={remainingTime}
               />
             </div>
           </div>
           <p className="text-lg text-center mt-8">
             <strong>Settled:</strong> {details.settled ? "Yes" : "No"}
           </p>
-          {!details.settled && (
-            !isAuctionEnded ? (
-              (account !== details.seller && account !== details.highestBidder) && (
-                <div className="mt-6">
-                  <input
-                    type="text"
-                    placeholder="Enter your bid in ETH"
-                    value={bidAmount}
-                    onChange={(e) => setBidAmount(e.target.value)}
-                    className="border rounded px-4 py-2 w-full mb-4"
-                  />
-                  <button onClick={handleBid} className="btn btn-primary w-full">
-                    Place Bid
+          {!details.settled &&
+            (!isAuctionEnded
+              ? account !== details.seller &&
+                account !== details.highestBidder && (
+                  <div className="mt-6">
+                    <input
+                      type="text"
+                      placeholder="Enter your bid in ETH"
+                      value={bidAmount}
+                      onChange={e => setBidAmount(e.target.value)}
+                      className="border rounded px-4 py-2 w-full mb-4"
+                    />
+                    <button onClick={handleBid} className="btn btn-primary w-full">
+                      Place Bid
+                    </button>
+                  </div>
+                )
+              : (account === details.seller || account === details.highestBidder) && (
+                  <button onClick={handleSettleAuction} className="btn btn-secondary w-full mt-4">
+                    Settle Auction
                   </button>
-                </div>
-              )
-            ) : (
-              (account === details.seller || account === details.highestBidder) && (
-                <button onClick={handleSettleAuction} className="btn btn-secondary w-full mt-4">
-                  Settle Auction
-                </button>
-              )
-            )
-          )}
+                ))}
         </div>
       )}
 
-      {!loading && !details && <p className="text-lg font-semibold text-base-content">No details found for this auction.</p>}
+      {!loading && !details && (
+        <p className="text-lg font-semibold text-base-content">No details found for this auction.</p>
+      )}
       {status && <p className="mt-4 text-sm text-center text-base-content">{status}</p>}
     </div>
   );

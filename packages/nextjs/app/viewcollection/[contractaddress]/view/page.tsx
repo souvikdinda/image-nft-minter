@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import deployedContracts from "../../../../contracts/deployedContracts";
 import { useWallet } from "../../../../hooks/useWallet";
 import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
-import { useContractStore } from "~~/services/contractStore";
-import { useRouter } from "next/navigation";
+import { getContractStore } from "~~/services/contractStore";
 
 interface NFT {
   tokenId: string;
@@ -40,7 +40,7 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
 
       const contract = contractStore.getCollectionContractFromAddress(contractaddress);
       if (!contract) {
@@ -114,7 +114,9 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
                 <strong>Token ID:</strong> {nft.tokenId}
               </p>
               <div className="flex space-x-4 mt-4">
-                <button onClick={() => handleCreateAuction(nft.tokenId)} className="btn btn-primary">Auction</button>
+                <button onClick={() => handleCreateAuction(nft.tokenId)} className="btn btn-primary">
+                  Auction
+                </button>
               </div>
             </div>
           ))}

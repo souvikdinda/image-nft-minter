@@ -1,12 +1,12 @@
-import { ethers } from "ethers";
 import deployedContracts from "../contracts/deployedContracts";
+import { ethers } from "ethers";
 import { BrowserProvider } from "ethers";
 
 export const deployNFTCollection = async (
   provider: BrowserProvider,
   name: string,
   symbol: string,
-  baseURI: string
+  baseURI: string,
 ): Promise<string> => {
   const signer = await provider.getSigner();
   const network = await provider.getNetwork();
@@ -23,30 +23,19 @@ export const deployNFTCollection = async (
 
   try {
     // Ensure baseURI ends with a trailing slash for proper metadata construction
-    const formattedBaseURI = baseURI.endsWith('/') 
-      ? baseURI 
-      : `${baseURI}/`;
+    const formattedBaseURI = baseURI.endsWith("/") ? baseURI : `${baseURI}/`;
 
     // Create a contract factory
-    const NFTCollectionFactory = new ethers.ContractFactory(
-      NFTCollectionABI,
-      NFTCollectionBytecode,
-      signer
-    );
+    const NFTCollectionFactory = new ethers.ContractFactory(NFTCollectionABI, NFTCollectionBytecode, signer);
 
     console.log("Deploying NFT collection...");
-    
+
     // Get the address of the signer to use as the initial owner
     const initialOwner = await signer.getAddress();
-    
+
     // Deploy the contract with constructor arguments
-    const contract = await NFTCollectionFactory.deploy(
-      name, 
-      symbol, 
-      initialOwner, 
-      formattedBaseURI
-    );
-    
+    const contract = await NFTCollectionFactory.deploy(name, symbol, initialOwner, formattedBaseURI);
+
     console.log("Waiting for deployment transaction to be mined...");
     const txHash = contract.deploymentTransaction()?.hash;
 
@@ -60,7 +49,7 @@ export const deployNFTCollection = async (
     if (!receipt) {
       throw new Error("Failed to retrieve transaction receipt");
     }
-    
+
     if (!receipt.contractAddress) {
       throw new Error("Failed to get contract address from receipt");
     }

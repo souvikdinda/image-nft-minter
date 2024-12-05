@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useWallet } from "../../hooks/useWallet";
 import deployedContracts from "../../contracts/deployedContracts";
-import { useContractStore } from "~~/services/contractStore";
+import { useWallet } from "../../hooks/useWallet";
 import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
+import { getContractStore } from "~~/services/contractStore";
 
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 const PINATA_GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || "";
@@ -41,7 +41,7 @@ export default function ViewAuctions() {
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
       const numericNetworkId = parseInt(networkId, 10) as keyof typeof deployedContracts;
-      const contractStore = useContractStore(numericNetworkId, signer as unknown as ethers.Signer);
+      const contractStore = getContractStore(numericNetworkId, signer as unknown as ethers.Signer);
 
       const auctionContract = contractStore.getAuctionContract();
       if (!auctionContract) {
@@ -53,7 +53,15 @@ export default function ViewAuctions() {
       const formattedAuctions: Auction[] = await Promise.all(
         activeAuctions.map(async (auction: any) => {
           const endTime = new Date(Number(auction.endTime) * 1000).toLocaleString();
-          console.log("Auction:", auction.nftContract, auction.tokenId.toString(), auction.highestBid.toString(), endTime, auction.seller, auction.settled);
+          console.log(
+            "Auction:",
+            auction.nftContract,
+            auction.tokenId.toString(),
+            auction.highestBid.toString(),
+            endTime,
+            auction.seller,
+            auction.settled,
+          );
           const collectionContract = contractStore.getCollectionContractFromAddress(auction.nftContract);
           let image = "";
 
@@ -62,9 +70,9 @@ export default function ViewAuctions() {
               const tokenURI = await collectionContract.tokenURI(auction.tokenId);
               const metadataIpfs = tokenURI.replaceAll("ipfs://", "");
               const metadataFile = await pinata.gateways.get(metadataIpfs);
-              const metadata = typeof metadataFile.data === "string" ? JSON.parse(metadataFile.data) : metadataFile.data;
+              const metadata =
+                typeof metadataFile.data === "string" ? JSON.parse(metadataFile.data) : metadataFile.data;
               image = metadata.image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/") || "";
-
             } catch (error) {
               console.error(`Failed to fetch tokenURI for ${auction.nftContract} - ${auction.tokenId}`, error);
             }
@@ -75,7 +83,7 @@ export default function ViewAuctions() {
             tokenId: auction.tokenId.toString(),
             image,
           };
-        })
+        }),
       );
 
       setAuctions(formattedAuctions);
@@ -107,7 +115,7 @@ export default function ViewAuctions() {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6 w-full max-w-5xl">
-        {auctions.map((auction) => (
+        {auctions.map(auction => (
           <div
             key={`${auction.nftContract}-${auction.tokenId}`}
             className="bg-base-100 shadow-md rounded-xl p-6 text-center flex flex-col items-center"
@@ -125,10 +133,7 @@ export default function ViewAuctions() {
             <p className="text-lg font-semibold mb-4">
               <strong>Token ID:</strong> {auction.tokenId}
             </p>
-            <button
-              onClick={() => handleViewDetails(auction.nftContract, auction.tokenId)}
-              className="btn btn-primary"
-            >
+            <button onClick={() => handleViewDetails(auction.nftContract, auction.tokenId)} className="btn btn-primary">
               View Details
             </button>
           </div>
