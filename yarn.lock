@@ -2510,6 +2510,7 @@ __metadata:
     react: ~18.3.1
     react-copy-to-clipboard: ~5.1.0
     react-dom: ~18.3.1
+    react-flip-numbers: ^3.0.8
     react-hot-toast: ~2.4.0
     tailwindcss: ~3.4.11
     type-fest: ~4.26.1
@@ -12991,6 +12992,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-flip-numbers@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "react-flip-numbers@npm:3.0.8"
+  dependencies:
+    react-simple-animate: ^3.0.1
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+    react-dom: ^16.8.0 || ^17 || ^18
+    react-simple-animate: ^3.0.1
+  checksum: ff355565d22aa5dee6d6ed0ca33d49ee5d7ef811542b6b0efd0749e92ab880935712dfb60a2d9f56dffffcc7312cb2416b16d3b68ae47f7c2dd5ff9cabd1db75
+  languageName: node
+  linkType: hard
+
 "react-hot-toast@npm:~2.4.0":
   version: 2.4.1
   resolution: "react-hot-toast@npm:2.4.1"
@@ -13083,6 +13097,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: e7ad2383ce20d63cf28f3ed14e63f684e139301fc4a5c1573da330d4465b733e6084c33b2bfcaee448c9b1df0e37993a15d6cba8a1dd80fe631f803e48e9f798
+  languageName: node
+  linkType: hard
+
+"react-simple-animate@npm:^3.0.1":
+  version: 3.5.2
+  resolution: "react-simple-animate@npm:3.5.2"
+  peerDependencies:
+    react-dom: ^16.8.0 || ^17 || ^18
+  checksum: 9e892e95d5d0852384587a5aa6b9c2afade7f4796935f7f79cdb20f1649c909d3d8cea83c5a7784a5a6f78c0ab189bd7e786007f6b5d8bdab14685bd78767ed6
   languageName: node
   linkType: hard
 
