@@ -52,16 +52,11 @@ export default function ViewImagesFromCollection({ params }: { params: { contrac
       const fetchedNFTs: NFT[] = [];
 
       for (const tokenId of tokenIds) {
-        console.log("Fetching NFT with token ID:", tokenId);
         const owner = await contract.ownerOf(tokenId);
-        console.log("Owner:", owner);
         const tokenURI = await contract.tokenURI(tokenId);
-        console.log("Token URI:", tokenURI);
         const metadataIpfs = tokenURI.replace("ipfs://", "");
         const metadataFile = await pinata.gateways.get(metadataIpfs);
-        console.log("Metadata file:", metadataFile);
         const metadata = typeof metadataFile.data === "string" ? JSON.parse(metadataFile.data) : metadataFile.data;
-        console.log("Metadata data:", metadata);
         const formattedMetadata: NFT = {
           tokenId: tokenId.toString(),
           name: metadata.name || "Unknown Name",

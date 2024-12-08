@@ -17,10 +17,12 @@ export default function AddToCollection({ params }: { params: { contractaddress:
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [status, setStatus] = useState("");
+  const [creatingNFT, setCreatingNFT] = useState(false);
 
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
   const handleImageUpload = async () => {
+    setCreatingNFT(true);
     if (!provider || !image || !name || !description) {
       alert("Please provide all required inputs and connect your wallet.");
       return;
@@ -72,6 +74,7 @@ export default function AddToCollection({ params }: { params: { contractaddress:
       console.error("Error uploading image:", error);
       setStatus("Failed to upload image.");
     }
+    setCreatingNFT(false);
   };
 
   return (
@@ -118,10 +121,26 @@ export default function AddToCollection({ params }: { params: { contractaddress:
           </div>
           <button
             onClick={handleImageUpload}
-            disabled={!provider}
-            className="w-full btn btn-primary font-bold transition disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!provider || creatingNFT}
+            className="w-full btn btn-primary font-bold flex items-center justify-center transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {provider ? "Mint NFT" : "Connect Wallet to Mint"}
+            {provider ? (
+              creatingNFT ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 mr-2 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                  </svg>
+                  Minting NFT...
+                </>
+              ) : (
+              "Mint NFT"
+              )) : "Connect Wallet to Mint"}
           </button>
           {status && (
             <div className="mt-6 text-center">

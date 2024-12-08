@@ -23,6 +23,9 @@ interface ExtendedHardhatUserConfig extends HardhatUserConfig {
 const deployerPrivateKey =
   process.env.DEPLOYER_PRIVATE_KEY ?? "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80";
 
+const tenderlyRpcUrl = process.env.TENDERLY_RPC_URL || "";
+console.log("Tenderly RPC URL:", tenderlyRpcUrl);
+
 const config: ExtendedHardhatUserConfig = {
   solidity: {
     compilers: [
@@ -45,7 +48,7 @@ const config: ExtendedHardhatUserConfig = {
   },
   networks: {
     virtual_sepolia: {
-      url: "https://virtual.sepolia.rpc.tenderly.co/2071e5d2-d352-4a38-86bc-79b9dcafb16d",
+      url: tenderlyRpcUrl,
       chainId: 11155111,
       accounts: [deployerPrivateKey],
       gasPrice: "auto",

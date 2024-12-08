@@ -19,6 +19,7 @@ function CreateAuctionComponent() {
   const [seconds, setSeconds] = useState("");
   const [status, setStatus] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [creatingAuction, setCreatingAuction] = useState(false);
 
   const pinata = new PinataSDK({ pinataJwt: PINATA_JWT, pinataGateway: PINATA_GATEWAY_URL });
 
@@ -32,7 +33,6 @@ function CreateAuctionComponent() {
     }
 
     try {
-      console.log("Fetching auction image...");
       const signer = provider.getSigner();
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
@@ -46,13 +46,11 @@ function CreateAuctionComponent() {
       }
 
       const tokenURI = await collectionContract.tokenURI(tokenid);
-      console.log("Token URI:", tokenURI);
-      const metadataIpfs = tokenURI.replace("ipfs://", "");
+      const metadataIpfs = tokenURI.replaceAll("ipfs://", "");
       const metadataFile = await pinata.gateways.get(metadataIpfs);
       const metadata = typeof metadataFile.data === "string" ? JSON.parse(metadataFile.data) : metadataFile.data;
       const imageUrl = metadata.image.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/") || "";
       setImageUrl(imageUrl);
-      console.log("Fetched auction image:", imageUrl);
     } catch (error) {
       console.error("Failed to fetch auction image:", error);
     }
@@ -78,6 +76,7 @@ function CreateAuctionComponent() {
 
     try {
       setStatus("Creating auction...");
+      setCreatingAuction(true);
       const signer = provider.getSigner();
       const network = await provider.getNetwork();
       const networkId = network.chainId.toString();
@@ -122,7 +121,6 @@ function CreateAuctionComponent() {
         return;
       }
       setStatus("Auction created successfully!");
-      console.log("Auction created successfully:", contractaddress, tokenid, startingBid, duration);
     } catch (error) {
       setStatus("Failed to create auction!");
       console.error("Failed to create auction:", error);
@@ -136,7 +134,7 @@ function CreateAuctionComponent() {
         <div className="shadow-md p-8 w-full max-w-lg flex flex-col bg-base-100 rounded-3xl">
           <div className="flex flex-col items-start mb-6 w-full max-w-lg">
             <p className="text-lg text-base-content text-center">
-              <strong>Contract Address:</strong> {contractaddress}
+              <strong>Contract Address:</strong> {contractaddress?.slice(0, 8)}...{contractaddress?.slice(-6)}
             </p>
             <p className="text-lg text-base-content text-center">
               <strong>Token ID:</strong> {tokenid}
@@ -190,9 +188,12 @@ function CreateAuctionComponent() {
           </div>
           <button
             onClick={handleCreateAuction}
-            className={`w-full btn btn-primary font-bold flex items-center justify-center`}
+            disabled={creatingAuction}
+            className={`w-full btn btn-primary font-bold flex items-center justify-center ${
+              creatingAuction ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Create Auction
+            {creatingAuction ? "Creating Auction..." : "Create Auction"}
           </button>
           {status && <p className="text-sm text-center mt-4">{status}</p>}
         </div>

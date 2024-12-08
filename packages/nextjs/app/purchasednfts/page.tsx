@@ -48,6 +48,12 @@ export default function PurchasedNFTs() {
         return;
       }
 
+      const auctionContract = contractStore.getAuctionContract();
+      if (!auctionContract) {
+        console.error("Failed to get auction contract");
+        return;
+      }
+
       const collections = await registryContract.getAllCollections();
       for (const collection of collections) {
         const collectionContract = contractStore.getCollectionContractFromAddress(collection);
@@ -60,14 +66,14 @@ export default function PurchasedNFTs() {
         const fetchedNFTs: NFT[] = [];
 
         for (const tokenId of tokenIds) {
-          console.log("Fetching NFT with token ID:", tokenId);
+          const auctionedNFTs = await auctionContract.isAuctionSettled(collection, tokenId);
+          if (auctionedNFTs) {
+            continue;
+          }
           const tokenURI = await collectionContract.tokenURI(tokenId);
-          console.log("Token URI:", tokenURI);
           const metadataIpfs = tokenURI.replace("ipfs://", "");
           const metadataFile = await pinata.gateways.get(metadataIpfs);
-          console.log("Metadata file:", metadataFile);
           const metadata = typeof metadataFile.data === "string" ? JSON.parse(metadataFile.data) : metadataFile.data;
-          console.log("Metadata data:", metadata);
           const formattedMetadata: NFT = {
             contractAddress: collection,
             tokenId: tokenId.toString(),

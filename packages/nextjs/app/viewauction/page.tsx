@@ -128,7 +128,7 @@ export default function ViewAuctions() {
               />
             )}
             <p className="text-lg font-semibold mb-2">
-              <strong>Contract Address:</strong> {auction.nftContract}
+              <strong>Contract Address:</strong> {auction.nftContract?.slice(0, 8)}...{auction.nftContract?.slice(-6)}
             </p>
             <p className="text-lg font-semibold mb-4">
               <strong>Token ID:</strong> {auction.tokenId}
