@@ -4,7 +4,7 @@ import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
-export const metadata = getMetadata({ title: "Scaffold-ETH 2 App", description: "Built with 🏗 Scaffold-ETH 2" });
+export const metadata = getMetadata({ title: "NFT Collection Creator", description: "A DApp built to mint NFTs with images" });
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
