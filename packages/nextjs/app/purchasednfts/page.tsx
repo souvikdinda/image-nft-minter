@@ -66,8 +66,11 @@ export default function PurchasedNFTs() {
         const fetchedNFTs: NFT[] = [];
 
         for (const tokenId of tokenIds) {
+          console.log("tokenId", tokenId);
+          console.log("collection", collection);
           const auctionedNFTs = await auctionContract.isAuctionSettled(collection, tokenId);
-          if (auctionedNFTs) {
+          console.log("auctionedNFTs", auctionedNFTs);
+          if (!auctionedNFTs) {
             continue;
           }
           const tokenURI = await collectionContract.tokenURI(tokenId);
